@@ -9,6 +9,7 @@ This plugin collects:
 # Installation
 
 On the agent host.
+- Install dependency by executing `/opt/datadog-agent/embedded/bin/pip install -r requirements.txt`
 - Copy `checks.d/jwt_http_check.py` to `checks.d`.
 - Copy `conf.d/jwt_http_check.yaml` to `conf.d` and write config.
 
