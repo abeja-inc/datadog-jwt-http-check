@@ -6,12 +6,13 @@ import time
 import json
 import jwt
 import re
+import tempfile
 
 
 class JwtHttpCheck(AgentCheck):
-    def get_token(self, iss, aud, kid, secret_key, algorithm, ttl_in_second):
+    def get_token(self, iss, aud, kid, secret_key, algorithm, ttl_in_seconds):
         now = time.time()
-        td = now + ttl_in_second
+        td = now + ttl_in_seconds
         payload = {
             "iss": iss,
             "aud": aud,
@@ -25,7 +26,8 @@ class JwtHttpCheck(AgentCheck):
 
     def get_image(self, url):
         filename = os.path.basename(url)
-        filepath = os.path.join('/tmp', filename)
+        tempdir = tempfile.gettempdir()
+        filepath = os.path.join(tempdir, filename)
         if not os.path.exists(filepath):
             r = requests.get(url)
             with open(filepath, 'wb') as f:
@@ -42,7 +44,7 @@ class JwtHttpCheck(AgentCheck):
         data_image_url = instance.get('data_image_url', None)
         iss = instance['jwt']['iss']
         aud = instance['jwt']['aud']
-        ttl_in_second = int(instance['jwt'].get('ttl_in_second', (24 * 60 * 60))
+        ttl_in_seconds = int(instance['jwt'].get('ttl_in_seconds', (24 * 60 * 60)))
         kid = instance['jwt']['kid']
         algo = instance['jwt']['algorithm']
         secret_key = instance['jwt']['secret_key']
@@ -51,13 +53,13 @@ class JwtHttpCheck(AgentCheck):
         default_timeout = self.init_config.get('default_timeout', 5)
         timeout = float(instance.get('timeout', default_timeout))
 
-        token = self.get_token(iss, aud, kid, secret_key, ttl_in_second)
+        token = self.get_token(iss, aud, kid, secret_key, algo, ttl_in_seconds)
         headers = {'Authorization': token}
 
         if data_image_url is not None:
             _data = self.get_image(data_image_url)
         else:
-            _data=json.dumps(data)
+            _data = json.dumps(data)
         s = time.time()
         try:
             r = requests.request(method, url, headers=headers, data=_data, timeout=timeout)
