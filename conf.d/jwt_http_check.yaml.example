@@ -1,0 +1,38 @@
+init_config:
+  default_timeout: 5
+
+instances:
+  - url: https://example.com/cars
+    method: POST
+    headers:
+      Content-Type: image/jpeg
+    data_image_url: https://example.com/test.jpg
+    tags:
+      - app:example-api
+      - env:dev
+      - endpoint:cars
+    jwt:
+      iss: xxx
+      aud: yyy
+      kid: kkk
+      algorithm: RS256
+      secret_key: |
+        -----BEGIN RSA PRIVATE KEY-----
+        .........
+        -----END RSA PRIVATE KEY-----
+
+  - url: https://example.com/drivers
+    method: GET
+    tags:
+      - app:example-api
+      - env:dev
+      - endpoint:drivers
+    jwt:
+      iss: xxx
+      aud: yyy
+      kid: kkk
+      algorithm: RS256
+      secret_key: |
+        -----BEGIN RSA PRIVATE KEY-----
+        .........
+        -----END RSA PRIVATE KEY-----
