@@ -74,12 +74,3 @@ class JwtHttpCheck(AgentCheck):
         latency = int((e - s) * 1000)
         self.gauge('{}.http.request.success'.format(metrics_prefix), success, tags=tags)
         self.gauge('{}.http.request.latency'.format(metrics_prefix), latency, tags=tags)
-
-
-if __name__ == '__main__':
-    check, instances = ArmsHTTPCheck.from_yaml('/opt/datadog-agent/etc/conf.d/custom_http.yaml')
-    for instance in instances:
-        check.check(instance)
-        if check.has_events():
-            print(check.get_events())
-        print(check.get_metrics())
