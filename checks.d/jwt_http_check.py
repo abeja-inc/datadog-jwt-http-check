@@ -7,6 +7,7 @@ import json
 import jwt
 import re
 import tempfile
+import datetime
 
 
 class JwtHttpCheck(AgentCheck):
@@ -36,7 +37,7 @@ class JwtHttpCheck(AgentCheck):
             return f.read()
 
     def check(self, instance):
-        url = instance['url']
+        url = instance['url'].fomrat(datetime.datetime.utcnow())
         method = instance['method']
         headers = instance.get('headers', {})
         data = instance.get('data', {})
