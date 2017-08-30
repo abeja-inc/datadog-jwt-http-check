@@ -66,7 +66,7 @@ instances:
 
 |Setting |Description|
 |---|---|
-|url | the url to test|
+|url | the url to test. You can include python format for datetime|
 |method | The HTTP method. This setting defaults to GET, though many other HTTP methods are supported, including POST and PUT.  |
 |timeout | The time in seconds to allow for a response.|
 |headers | http headers|
@@ -80,3 +80,22 @@ instances:
 | jwt.algorithm  |  jwt param to get token |
 | jwt.ttl_in_second  |  jwt param to get token, default value is 86400 |
 | jwt.secret_key  |  jwt param to get token |
+
+
+# Including datetime string in url
+
+You can include python's string formatting in url.
+`datetime.datetime.utcnow()` is extracted to the format.
+
+see detail about strftime:http://strftime.org/
+
+**Examples**
+Assume that http request is executed at 2017-01-01T12:00:00Z
+
+``` abap
+- url: http://example.com?id={:%Y%d%m}
+-> http://example.com?id=20170101
+
+- url: http://example.com?id={:%Y-%d-%m-%H-%M-%S}
+-> http://example.com?id=2017-01-01-12-00-00
+```
