@@ -37,7 +37,7 @@ class JwtHttpCheck(AgentCheck):
             return f.read()
 
     def check(self, instance):
-        url = instance['url'].fomrat(datetime.datetime.utcnow())
+        url = instance['url'].format(datetime.datetime.utcnow())
         method = instance['method']
         headers = instance.get('headers', {})
         data = instance.get('data', {})
